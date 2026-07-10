@@ -8,52 +8,35 @@ var root = {
     rainbow: true,
     matrixspeed: 50
 };
-
 var c = document.getElementById("c");
 var ctx = c.getContext("2d");
-
 var hueFw = false;
 var hue = -0.01;
-
-// making the canvas full screen
 c.height = window.innerHeight;
 c.width = window.innerWidth;
-
-// the characters
-var konkani  = "゠アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレワヰヱヲンヺ・ーヽヿ0123456789"
-// converting the string into an array of single characters
-var characters = konkani.split("");
+var konkani  = "undefined"
+var characters = ["YOUR",
+				  "WORDS",
+				  "HERE",
+				  "LIKE",
+				  "THIS"]
 var font_size = 14;
-var columns = c.width/font_size;    // number of columns for the rain
+var columns = c.width/font_size;
 var gradient = ctx.createLinearGradient(0,10, 0,200);
-// an array of drops - one per column
 var drops = [];
-// x below is the x coordinate
-// 1 = y-coordinate of the drop (same for every drop initially)
 for (var x = 0; x < columns; x++)
     drops[x] = 1;
-
-// drawing the characters
+var text = konkani
 function draw() {
-    // Get the BG color based on the current time i.e. rgb(hh, mm, ss)
-    // translucent BG to show trail
-
     ctx.fillStyle = "rgba(0,0,0, 0.05)";
     ctx.fillRect(0, 0, c.width, c.height);
-
-    ctx.fillStyle = "#BBB"; // grey text
+    ctx.fillStyle = "#BBB"
     ctx.font = font_size + "px arial";
-
-    // looping over drops
     for (var i = 0; i < drops.length; i++)
     {
-        // background color
         ctx.fillStyle = "rgba(10,10,10, 1)";
-        ctx.fillRect(i * font_size, drops[i] * font_size,font_size,font_size);
-        // a random chinese character to print
+        ctx.fillRect(i * font_size, drops[i] * font_size, font_size, font_size);
         var text = characters[Math.floor(Math.random() * characters.length)];
-        // x = i * font_size, y = value of drops[i] * font_size
-
         if (root.rainbow) {
           hue += (hueFw) ? 0.01 : -0.01;
           var rr = Math.floor(127 * Math.sin(root.rainbowSpeed * hue + 0) + 128);
@@ -63,20 +46,13 @@ function draw() {
         } else {
           ctx.fillStyle = 'rgba(' + root.wavecolor.r + ',' + root.wavecolor.g + ',' + root.wavecolor.b + ')';
         }
-
         ctx.fillText(text, i * font_size, drops[i] * font_size);
-        // Incrementing Y coordinate
         drops[i]++;
-        // sending the drop back to the top randomly after it has crossed the screen
-        // adding randomness to the reset to make the drops scattered on the Y axis
-       if (drops[i] * font_size > c.height && Math.random() > 0.975)
+      if (drops[i] * font_size > c.height && Math.random() > 0.975)
 			      drops[i] = 0;
     }
 }
-
 setInterval(draw, root.matrixspeed);
-
-
 function livelyPropertyListener(name, val)
 {
   switch(name) {
@@ -91,7 +67,6 @@ function livelyPropertyListener(name, val)
       break;     
   }
 }
-
 function hexToRgb(hex) {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {
@@ -100,4 +75,3 @@ function hexToRgb(hex) {
     b: parseInt(result[3], 16)
   } : null;
 }
-
